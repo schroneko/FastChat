@@ -16,7 +16,7 @@ import tqdm
 from fastchat.llm_judge.common import (
     load_questions,
     temperature_config,
-    chat_completion_openai,
+    chat_completion_openai_azure,
     chat_completion_anthropic,
     chat_completion_palm,
 )
@@ -56,7 +56,9 @@ def get_answer(
                     chat_state, model, conv, temperature, max_tokens
                 )
             else:
-                output = chat_completion_openai(model, conv, temperature, max_tokens)
+                output = chat_completion_openai_azure(
+                    model, conv, temperature, max_tokens
+                )
 
             conv.update_last_message(output)
             turns.append(output)

@@ -164,7 +164,9 @@ def run_judge_single(question, answer, judge, ref_answer, multi_turn=False):
     conv.append_message(conv.roles[1], None)
 
     if model in OPENAI_MODEL_LIST:
-        judgment = chat_completion_openai(model, conv, temperature=0, max_tokens=2048)
+        judgment = chat_completion_openai_azure(
+            model, conv, temperature=0, max_tokens=2048
+        )
     elif model in ANTHROPIC_MODEL_LIST:
         judgment = chat_completion_anthropic(
             model, conv, temperature=0, max_tokens=1024
@@ -268,7 +270,9 @@ def run_judge_pair(question, answer_a, answer_b, judge, ref_answer, multi_turn=F
 
     if model in OPENAI_MODEL_LIST:
         conv.set_system_message(system_prompt)
-        judgment = chat_completion_openai(model, conv, temperature=0, max_tokens=2048)
+        judgment = chat_completion_openai_azure(
+            model, conv, temperature=0, max_tokens=2048
+        )
     elif model in ANTHROPIC_MODEL_LIST:
         if system_prompt != "You are a helpful assistant.":
             user_prompt = "[Instruction]\n" + system_prompt + "\n\n" + user_prompt
@@ -658,7 +662,7 @@ def get_pairwise_judge_explanation(gamekey, judgment_dict):
         return (
             f"**Game 1**. **A**: {model_1}, **B**: {model_2}\n\n"
             f"**Judgment**: {g1_judgment}"
-            + f"\n\n`--------------------------`\n\n"
+            + "\n\n`--------------------------`\n\n"
             + f"**Game 2**. **A**: {model_2}, **B**: {model_1}\n\n"
             f"**Judgment**: {g2_judgment}"
         )
